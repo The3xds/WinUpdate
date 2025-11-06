@@ -1,0 +1,7 @@
+appId: com.example.appupdater
+productName: AppUpdater
+directories:
+  output: dist
+win:
+  target:
+    - nsis

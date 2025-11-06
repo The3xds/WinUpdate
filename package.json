@@ -1,0 +1,36 @@
+{
+  "name": "win-update",
+  "version": "1.0.0",
+  "description": "WinUpdate",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder",
+    "dist-portable": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.winupdate.app",
+    "productName": "WinUpdate",
+    "win": {
+      "icon": "icon.ico",
+      "requestedExecutionLevel": "asInvoker",
+      "target": [
+        "nsis"
+      ]
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "icon.ico"
+    ]
+  }
+}
