@@ -107,6 +107,9 @@ document.getElementById("settings-btn").addEventListener("click", () => {
 
 // View Functions
 async function loadView(view) {
+  // Immediately update header before loading content
+  updateHeaderForView(view);
+  
   if (view === 'available') {
     loadApps();
   } else if (view === 'installed') {
@@ -119,6 +122,55 @@ async function loadView(view) {
     loadWingetSearch();
   } else if (view === 'tweaks') {
     loadTweaksView();
+  }
+}
+
+function updateHeaderForView(view) {
+  const panelTitle = document.getElementById('panel-title');
+  const panelSubtitle = document.getElementById('panel-subtitle');
+  const toolbarInfo = document.getElementById('toolbar-info');
+  const toolbarStatus = document.getElementById('toolbar-status');
+  
+  toolbarInfo.style.display = "flex";
+  
+  const headers = {
+    'available': {
+      title: 'Available Updates',
+      subtitle: 'Scanning...',
+      status: 'Scanning...'
+    },
+    'installed': {
+      title: 'Installed Applications',
+      subtitle: 'Loading...',
+      status: 'Loading...'
+    },
+    'pending': {
+      title: 'Pending Updates',
+      subtitle: 'Updates queued for installation',
+      status: 'No pending updates'
+    },
+    'history': {
+      title: 'Update History',
+      subtitle: 'Loading...',
+      status: 'Loading...'
+    },
+    'winget': {
+      title: 'Winget App Store',
+      subtitle: 'Search and install applications from Winget',
+      status: 'Ready to search'
+    },
+    'tweaks': {
+      title: 'System Tweaks',
+      subtitle: 'Customize Windows behavior and appearance',
+      status: 'Ready'
+    }
+  };
+  
+  const header = headers[view];
+  if (header) {
+    panelTitle.textContent = header.title;
+    panelSubtitle.textContent = header.subtitle;
+    toolbarStatus.textContent = header.status;
   }
 }
 
@@ -141,6 +193,8 @@ async function loadInstalledApps() {
   toolbarStatus.textContent = "Loading...";
 
   const apps = await getAllInstalledApps();
+  if (currentView !== 'installed') return;
+
   
   results.innerHTML = "";
 
@@ -630,7 +684,15 @@ function loadWingetSearch() {
     card.dataset.profileKey = key;
     card.innerHTML = `
       <div class="profile-name">${profile.name}</div>
-      <div class="profile-apps">${profile.apps.map(a => a.name).join(', ')}</div>
+      <div class="profile-apps">
+        ${(() => {
+        const names = profile.apps.map(a => a.name);
+        const limit = 6; // ✅ show only 6 apps
+        return names.length > limit
+          ? names.slice(0, limit).join(', ') + ` +${names.length - limit} more`
+          : names.join(', ');
+        })()}
+      </div>
       <div class="profile-count">${profile.apps.length} apps</div>
     `;
     
