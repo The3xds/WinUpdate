@@ -15,6 +15,7 @@ const installProfiles = {
     apps: [
       { id: 'Brave.Brave', name: 'Brave Browser' },
       { id: 'Valve.Steam', name: 'Steam' },
+	  { id: 'EpicGames.EpicGamesLauncher', name: 'Epic Games' },
       { id: 'Discord.Discord', name: 'Discord' },
       { id: 'Spotify.Spotify', name: 'Spotify' },
 	  { id: 'Nvidia.GeForceExperience', name: 'GeForce Experience' },
@@ -24,15 +25,32 @@ const installProfiles = {
 	  { id: 'Logitech.GHUB', name: 'Logitech G HUB' },
 	  { id: 'WinSCP.WinSCP', name: 'WinSCP' },
 	  { id: 'RevoUninstaller.RevoUninstaller', name: 'Revo Uninstaller' },
-	  { id: 'Modrinth.ModrinthApp', name: 'Modrinth App' }
+	  { id: 'Modrinth.ModrinthApp', name: 'Modrinth App' },
+	  { id: 'CPUID.CPU-Z', name: 'CPUID CPU-Z' },
+	  { id: 'CPUID.HWMonitor', name: 'CPUID HWMonitor' }
     ]
   },
   'nbq': {
     name: 'NBQ Setup',
     apps: [
+	  { id: 'CPUID.CPU-Z', name: 'CPUID CPU-Z' },
+	  { id: 'CPUID.HWMonitor', name: 'CPUID HWMonitor' },
+	  { id: 'RARLab.WinRAR', name: 'WinRAR 7.13 (64-bit)' },
+	  { id: 'OBSProject.OBSStudio', name: 'OBS Studio' },
+	  { id: 'Valve.Steam', name: 'Steam' },
+	  { id: 'Ubisoft.Connect', name: 'Ubisoft Connect' },
+	  { id: 'Discord.Discord', name: 'Discord' },
+	  { id: 'Spotify.Spotify', name: 'Spotify' },
+	  { id: 'Google.Chrome', name: 'Google Chrome' },
+	  { id: 'RevoUninstaller.RevoUninstaller', name: 'Revo Uninstaller' },
+	  { id: 'Windscribe.Windscribe', name: 'Windscribe' }
+    ]
+  },
+  'jens': {
+    name: 'Jens Setup',
+    apps: [
       { id: 'Brave.Brave', name: 'Brave Browser' },
       { id: 'Valve.Steam', name: 'Steam' },
-      { id: 'Mozilla.Firefox', name: 'Firefox' },
       { id: 'VideoLAN.VLC', name: 'VLC Media Player' },
       { id: 'Notepad++.Notepad++', name: 'Notepad++' }
     ]
@@ -43,8 +61,7 @@ const installProfiles = {
       { id: 'Valve.Steam', name: 'Steam' },
       { id: 'EpicGames.EpicGamesLauncher', name: 'Epic Games' },
       { id: 'Discord.Discord', name: 'Discord' },
-      { id: 'Nvidia.GeForceExperience', name: 'GeForce Experience' },
-      { id: 'TeamSpeakSystems.TeamSpeakClient', name: 'TeamSpeak' }
+      { id: 'Nvidia.GeForceExperience', name: 'GeForce Experience' }
     ]
   },
   'developer': {
@@ -55,7 +72,7 @@ const installProfiles = {
       { id: 'Docker.DockerDesktop', name: 'Docker Desktop' },
       { id: 'Microsoft.WindowsTerminal', name: 'Windows Terminal' },
       { id: 'Postman.Postman', name: 'Postman' },
-      { id: 'Google.Chrome', name: 'Google Chrome' }
+      { id: 'Brave.Brave', name: 'Brave Browser' }
     ]
   }
 };
