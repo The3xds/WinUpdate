@@ -1,4 +1,5 @@
 // main.js
+const { spawn } = require("child_process");
 const {
     app,
     BrowserWindow,
@@ -21,7 +22,10 @@ function createWindow() {
         height: 800,
         autoHideMenuBar: true,
         webPreferences: {
-            preload: path.join(__dirname, "preload.js")
+            preload: path.join(__dirname, "preload.js"),
+            contextIsolation: true,
+            nodeIntegration: false,
+            sandbox: false
         }
     });
 
@@ -113,7 +117,6 @@ async function resolveRealIdByName(name) {
         return null;
     }
 }
-
 
 /**
  * Handler: Get outdated apps
@@ -683,4 +686,33 @@ ipcMain.handle("get-classic-menu-state", async () => {
   } catch (_) {
     return false;
   }
+});
+
+ipcMain.handle("run-powershell", async (_, command) => {
+  return new Promise((resolve) => {
+    try {
+      // Create a simple batch script approach to avoid quote hell
+      // Use PowerShell's -EncodedCommand to pass the command safely
+      const encodedCommand = Buffer.from(command, 'utf16le').toString('base64');
+      
+      const fullCommand = `powershell -Command "Start-Process powershell -Verb RunAs -ArgumentList '-EncodedCommand ${encodedCommand}'"`;
+      
+      console.log("Executing elevated PowerShell with encoded command");
+      
+      exec(fullCommand, (error, stdout, stderr) => {
+        if (error) {
+          console.error("Error launching PowerShell:", error.message);
+          resolve({ success: false, error: error.message });
+          return;
+        }
+        
+        console.log("PowerShell launched successfully");
+        resolve({ success: true });
+      });
+      
+    } catch (err) {
+      console.error("Exception launching PowerShell:", err);
+      resolve({ success: false, error: err.message });
+    }
+  });
 });

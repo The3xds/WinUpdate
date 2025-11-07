@@ -26,6 +26,7 @@ const installProfiles = {
 	  { id: 'WinSCP.WinSCP', name: 'WinSCP' },
 	  { id: 'RevoUninstaller.RevoUninstaller', name: 'Revo Uninstaller' },
 	  { id: 'Modrinth.ModrinthApp', name: 'Modrinth App' },
+	  { id: '7zip.7zip', name: '7-Zip' },
 	  { id: 'CPUID.CPU-Z', name: 'CPUID CPU-Z' },
 	  { id: 'CPUID.HWMonitor', name: 'CPUID HWMonitor' }
     ]
@@ -35,7 +36,7 @@ const installProfiles = {
     apps: [
 	  { id: 'CPUID.CPU-Z', name: 'CPUID CPU-Z' },
 	  { id: 'CPUID.HWMonitor', name: 'CPUID HWMonitor' },
-	  { id: 'RARLab.WinRAR', name: 'WinRAR 7.13 (64-bit)' },
+	  { id: 'RARLab.WinRAR', name: 'WinRAR' },
 	  { id: 'OBSProject.OBSStudio', name: 'OBS Studio' },
 	  { id: 'Valve.Steam', name: 'Steam' },
 	  { id: 'Ubisoft.Connect', name: 'Ubisoft Connect' },
@@ -1428,10 +1429,9 @@ function loadTweaksView() {
     <div class="tweaks-container">
       <div class="tweaks-section">
         <div class="tweaks-section-header">
-          <span class="tweaks-icon">🖱️</span>
           <div>
-            <div class="tweaks-section-title">Context Menu</div>
-            <div class="tweaks-section-description">Customize right-click menu behavior</div>
+            <div class="tweaks-section-title">Tweaks Menu</div>
+            <div class="tweaks-section-description">Customize right-click menu behavior and launch WinUtil</div>
           </div>
         </div>
         
@@ -1446,6 +1446,15 @@ function loadTweaksView() {
               <span class="toggle-slider"></span>
             </label>
           </div>
+		  
+		<div class="tweak-item">
+          <div class="tweak-info">
+            <div class="tweak-name">Run Chris Titus Tech WinUtil</div>
+              <div class="tweak-description">Downloads and runs the WinUtil script from christitus.com</div>
+            </div>
+               <button class="action-button" id="run-ctt-script-btn">Run Script</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1454,6 +1463,45 @@ function loadTweaksView() {
   // Load toggle initial state
   window.appAPI.getClassicMenuState().then(enabled => {
     document.getElementById('classic-menu-toggle').checked = enabled;
+  });
+  
+    document.getElementById('run-ctt-script-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('run-ctt-script-btn');
+    btn.disabled = true;
+    btn.textContent = "Launching...";
+    
+    try {
+      const result = await window.appAPI.runPowerShell(`irm "https://christitus.com/win" | iex`);
+      
+      if (result.success) {
+        btn.className = "action-button success";
+        btn.textContent = "✓ Launched";
+        
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.className = "action-button";
+          btn.textContent = "Run Script";
+        }, 2000);
+      } else {
+        btn.className = "action-button error";
+        btn.textContent = "✗ Failed";
+        
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.className = "action-button";
+          btn.textContent = "Retry";
+        }, 2000);
+      }
+    } catch (e) {
+      btn.className = "action-button error";
+      btn.textContent = "✗ Error";
+      
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.className = "action-button";
+        btn.textContent = "Retry";
+      }, 2000);
+    }
   });
 
   // Toggle listener
