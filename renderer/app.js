@@ -117,6 +117,8 @@ async function loadView(view) {
     loadHistoryView();
   } else if (view === 'winget') {
     loadWingetSearch();
+  } else if (view === 'tweaks') {
+    loadTweaksView();
   }
 }
 
@@ -1330,4 +1332,57 @@ function updateProgressBar(appId, progress, status) {
     };
     progressText.textContent = statusTexts[status] || `${progress}%`;
   }
+}
+
+function loadTweaksView() {
+  const results = document.getElementById("results");
+  const panelSubtitle = document.getElementById("panel-subtitle");
+  const toolbarInfo = document.getElementById("toolbar-info");
+  const toolbarStatus = document.getElementById("toolbar-status");
+
+  document.getElementById('panel-title').textContent = 'System Tweaks';
+  panelSubtitle.textContent = "Customize Windows behavior and appearance";
+  toolbarInfo.style.display = "flex";
+  toolbarStatus.textContent = "Ready";
+
+  results.innerHTML = `
+    <div class="tweaks-container">
+      <div class="tweaks-section">
+        <div class="tweaks-section-header">
+          <span class="tweaks-icon">🖱️</span>
+          <div>
+            <div class="tweaks-section-title">Context Menu</div>
+            <div class="tweaks-section-description">Customize right-click menu behavior</div>
+          </div>
+        </div>
+        
+        <div class="tweaks-list">
+          <div class="tweak-item">
+            <div class="tweak-info">
+              <div class="tweak-name">Classic Context Menu</div>
+              <div class="tweak-description">Use the Windows 10-style right-click menu instead of Windows 11's modern menu</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="classic-menu-toggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Load toggle initial state
+  window.appAPI.getClassicMenuState().then(enabled => {
+    document.getElementById('classic-menu-toggle').checked = enabled;
+  });
+
+  // Toggle listener
+  document.getElementById('classic-menu-toggle').addEventListener('change', (e) => {
+    if (e.target.checked) {
+      window.appAPI.enableClassicMenu();
+    } else {
+      window.appAPI.disableClassicMenu();
+    }
+  });
 }

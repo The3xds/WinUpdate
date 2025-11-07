@@ -648,3 +648,39 @@ ipcMain.handle("install-app", async (_, appId) => {
         };
     }
 });
+
+// Windows 10 Classic Context Menu Tweak
+const classicMenuKey = 'HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}';
+
+ipcMain.handle("enable-classic-menu", async () => {
+  try {
+    await runCommand(`reg add "${classicMenuKey}\\InprocServer32" /f /ve`);
+    await runCommand("taskkill /f /im explorer.exe");
+    await runCommand("start explorer.exe");
+    return true;
+  } catch (e) {
+    console.error("Enable classic menu failed:", e);
+    return false;
+  }
+});
+
+ipcMain.handle("disable-classic-menu", async () => {
+  try {
+    await runCommand(`reg delete "${classicMenuKey}" /f`);
+    await runCommand("taskkill /f /im explorer.exe");
+    await runCommand("start explorer.exe");
+    return true;
+  } catch (e) {
+    console.error("Disable classic menu failed:", e);
+    return false;
+  }
+});
+
+ipcMain.handle("get-classic-menu-state", async () => {
+  try {
+    const { stdout } = await runCommand(`reg query "${classicMenuKey}\\InprocServer32"`);
+    return stdout && stdout.length > 0;
+  } catch (_) {
+    return false;
+  }
+});

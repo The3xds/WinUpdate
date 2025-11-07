@@ -18,6 +18,9 @@ contextBridge.exposeInMainWorld("appAPI", {
   installApp: (id) => ipcRenderer.invoke("install-app", id),
 
   // Listen to progress updates (updates + installs)
-  onUpdateProgress: (callback) =>
-    ipcRenderer.on("update-progress", (_, data) => callback(data))
+  onUpdateProgress: (callback) => ipcRenderer.on("update-progress", (_, data) => callback(data)),
+	
+  enableClassicMenu: () => ipcRenderer.invoke("enable-classic-menu"),
+  disableClassicMenu: () => ipcRenderer.invoke("disable-classic-menu"),
+  getClassicMenuState: () => ipcRenderer.invoke("get-classic-menu-state")
 });
